@@ -1,0 +1,8 @@
+<div id="chat_history" style="height: 500px">
+  <div *ngFor="let message of messages">
+    {{ message.text }}
+  </div>
+</div>
+
+<input [(ngModel)]="message" type="text" placeholder="message" id="message" name="message" class="form-control">
+<button (click)="sendMessage(message)" class="btn btn-primary">Send</button>

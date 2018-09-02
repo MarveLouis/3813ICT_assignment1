@@ -1,0 +1,8 @@
+<h1>
+  Enter your name
+</h1>
+
+<form (submit)="loginUser($event)">
+  <input [(ngModel)]="username" type="text" placeholder="Username" id="username" name="username" class="form-control">
+  <button type="submit" class="btn btn-primary">Enter Chat</button>
+</form>
