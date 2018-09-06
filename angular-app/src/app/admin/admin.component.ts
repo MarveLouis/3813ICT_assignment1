@@ -12,6 +12,7 @@ export class AdminComponent implements OnInit {
   constructor(private router:Router, private http: HttpClient) { }
 
   username:string;
+  email:string;
   role:string;
 
   users = [];
@@ -22,7 +23,7 @@ export class AdminComponent implements OnInit {
       console.log('Not valid login');
       alert("Please log in first.");
       this.router.navigateByUrl('home');
-    } else if (sessionStorage.role != "super" && sessionStorage.role != "group") {
+    } else if (sessionStorage.role != "super") {
       alert("Access denied.");
       this.router.navigateByUrl('/chat');
     }
@@ -78,6 +79,56 @@ export class AdminComponent implements OnInit {
       });
     } else {
       alert("Selecet a user to delete.");
+    }
+  }
+
+  //Register a new user
+  public registerUser(event) {
+    event.preventDefault();
+    console.log(this.username);
+    if (sessionStorage.role != "user"){
+      if(this.username === "" || this.email === "" || this.role === ""){
+        alert("Please fill in all the fields.");
+      }else{
+        const req = this.http.post('http://localhost:3000/api/reg', {
+            username: this.username,
+            email: this.email,
+            role: this.role
+          })
+            .subscribe((data: any) => {
+                if (data.success) {
+                  alert('User registered.');
+                  this.username = '';
+                  this.email='',
+                  this.role = '';
+                  const req = this.http.post('http://localhost:3000/api/users', {
+                    })
+                      .subscribe((data: any) => {
+                          if (data.userData) {
+                            console.log('data', data.userData);
+                            this.users = data.userData;
+                            console.log('thisusers',this.users);
+                          } else {
+                            alert('Error!');
+                            return;
+                          }
+                        },
+                        err => {
+                          alert('An error has occured trying to create user.')
+                          console.log("Error occured");
+                          return;
+                        });
+                } else {
+                  alert('Error!');
+                  return;
+                }
+              },
+              err => {
+                alert('An error has occured trying to create user.')
+                console.log("Error occured");
+                return;
+              });
+            }
     }
   }
   

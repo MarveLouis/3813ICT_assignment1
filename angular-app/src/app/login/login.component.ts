@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class LoginComponent implements OnInit {
 
   public username:string;
+  public email:string;
   public role:string;
 
   constructor(private router:Router, private form:FormsModule, private http: HttpClient) { }
@@ -27,12 +28,13 @@ export class LoginComponent implements OnInit {
   public loginUser(event) {
     event.preventDefault();
 
-    if (this.username === "") {
-      alert("Username cannot be empty");
+    if (this.username === "" && this.email === "") {
+      alert("Username and Email cannot be empty.");
       return;
     } else if (typeof(Storage) !== "undefined") {
       const req = this.http.post('http://localhost:3000/api/auth', {
         username: this.username,
+        email: this.email,
       })
 
       .subscribe((data: any) => {
@@ -40,13 +42,14 @@ export class LoginComponent implements OnInit {
           alert("Login Successful.");
           this.router.navigateByUrl('/chat');
           sessionStorage.setItem("username", data.username);
+          sessionStorage.setItem("email", data.email);
           sessionStorage.setItem("role", data.role);
         } else {
-          alert("User does not exist.");
+          alert("Username and/or Email are incorrect.");
         }
       },
       err => {
-        alert("An error has occured.111");
+        alert("An error has occured.");
         return;
       });
     } else {

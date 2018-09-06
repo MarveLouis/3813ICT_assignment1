@@ -1,1 +1,1 @@
-[{"name":"super","role":"super"},{"name":"test","role":"group"},{"name":"asd","role":"asd"}]
+[{"name":"super","email":"super","role":"super"},{"name":"asd","email":"asd","role":"user"},{"name":"group","email":"group","role":"group"},{"name":"test","email":"test","role":"user"},{"name":"Louis","email":"louis.lee2@griffithuni.edu.au","role":"user"}]

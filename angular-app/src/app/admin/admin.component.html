@@ -1,23 +1,59 @@
+<!-- Listing all users block -->
 <div class="container list-group-item">
   <ul class="list-group ">
     <h3>List of All Users</h3>
 
-    <li class="list-group-item" *ngFor="let user of users">
+    <li class="list-group-item" *ngFor="let user of users, index as i">
+      ID: {{ i }} <br/>
       USERNAME: {{ user.name }} <br/> 
+      EMAIL: {{ user.email }} <br/>
       ROLE: {{ user.role }}
     </li>
   </ul>
 </div>
 
+<!-- Register user block -->
+<div class="container list-group-item">
+  <h3>Register a User</h3>
+    
+      <form (submit)="registerUser($event)">
+        <div class="form-group">
+          <label>Username</label>
+          <input class="form-control" name="username" placeholder="Enter Username" [(ngModel)]="username">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input class="form-control" name="email" placeholder="Enter Email" [(ngModel)]="email">
+          </div>
+
+        <div class="form-group">
+          <label>Role</label>
+          <select class="form-control" [(ngModel)]="role" name="role">
+            <option value="user">User</option>
+            <option value="group">Group Admin</option>
+            <option value="super">Super Admin</option>
+          </select>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Register</button>
+      </form>
+</div>
+
+<!-- Delete a user block -->
 <div class ="container list-group-item">
     <h3>Delete a User</h3>
-    Selecte a user to delete:
+    <label>Selecte a user to delete:</label>
+
     <form (submit)="deleteUser(dUser);">
-        <select class="btn btn-outline-primary" placeholder="Delete User" [(ngModel)]="dUser" name="deluser">
-          <option *ngFor="let user of users, index as i" [value]="user.name">
-            ({{i}}) {{user.name}} ({{user.role}})
-          </option>
-        </select> <br/> <br/>
+        <div class="form-group">
+          <select class="form-control" placeholder="Delete User" [(ngModel)]="dUser" name="deluser">
+            <option *ngFor="let user of users, index as i" [value]="user.name">
+              ({{i}}) {{user.name}} ({{user.role}})
+            </option>
+          </select>
+        </div>
+
       <button class="btn btn-danger" type="submit">Delete</button>
     </form>
   </div>

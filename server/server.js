@@ -20,10 +20,9 @@ require('./listen.js')(http);
 app.post('/api/auth', (req, res) => {
 
     var uname = req.body.username;
+    var uemail = req.body.email;
     var urole;
     var userObj;
-
-    console.log(uname);
 
     fs.readFile('authdata.json', 'utf8', function(err, data) {
 
@@ -36,10 +35,14 @@ app.post('/api/auth', (req, res) => {
     userObj = JSON.parse(data);
         for (let i = 0; i < userObj.length; i++) {
             if (userObj[i].name == uname) {
-                urole = userObj[i].role;
-                res.send({'username':uname, 'role':urole, 'success':true});
-                console.log(urole);
-                return;
+
+                for (let j = 0; j < userObj.length; j++) {
+                    if (userObj[j].email == uemail) {
+                        urole = userObj[j].role;
+                        res.send({'username':uname, 'email':uemail, 'role':urole, 'success':true});
+                        return;
+                    }
+                }
             }
         }
     res.send({'username':uname,'success':false});
@@ -91,41 +94,24 @@ app.post('/api/del', (req, res) => {
 
 //Route to handle user register
 app.post('/api/reg', (req, res) => {
+
     var regUserObj;
     var regUname = req.body.username;
     var regUemail = req.body.email;
     var regUrole = req.body.role;
-    console.log(regUname)
   
-    fs.readFile('userdata.json','utf-8', function(err, data){
-        if (err){
+    fs.readFile('authdata.json','utf-8', function(err, data) {
+        if (err) {
             console.log(err);
         } else {
-        regUserObj = JSON.parse(data);
-  
-        for (let i=0;i<regUserObj.length;i++){
-          if (regUserObj[i].name == regUname || regUserObj[i].email == regUemail){
-            //Check for duplicates
-            isUser = 1;
-          }
-        }
-  
-        if (isUser > 0){
-          //Name already exists in the file
-          console.log(req.body);
-           res.send({'username':'','success':false});
-         }else{
-           //Add name to list of names
-           regUserObj.push({'name':regUname,'email':regUemail,'role':regUrole})
-           //Prepare data for writing (convert to a string)
-           var newdata = JSON.stringify(regUserObj);
-           fs.writeFile('userdata.json',newdata,'utf-8',function(err){
-             if (err) throw err;
-             //Send response that registration was successfull.
-             res.send({'username':regUname,'email':regUemail,'role':regUrole,'success':true});
+            regUserObj = JSON.parse(data);
+            regUserObj.push({'name':regUname, 'email':regUemail, 'role':regUrole})
+            var newdata = JSON.stringify(regUserObj);
+            fs.writeFile('authdata.json',newdata,'utf-8',function(err) {
+                if (err) throw err;
+                res.send({'username':regUname,'email':regUemail, 'role':regUrole,'success':true});
             });
-         }
-       }
+        }
     });
-  });
+});
   
