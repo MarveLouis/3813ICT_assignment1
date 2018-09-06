@@ -76,9 +76,9 @@ app.post('/api/del', (req, res) => {
         } else {
             delUserObj = JSON.parse(data);
   
-            for (let l=0;l<delUserObj.length;l++) {
-                if (delUserObj[l].name == delUname) {
-                    delete delUserObj[l];
+            for (let i = 0; i < delUserObj.length; i++) {
+                if (delUserObj[i].name == delUname) {
+                    delete delUserObj[i];
                     break;
                 }
             }
@@ -110,6 +110,71 @@ app.post('/api/reg', (req, res) => {
             fs.writeFile('authdata.json',newdata,'utf-8',function(err) {
                 if (err) throw err;
                 res.send({'username':regUname,'email':regUemail, 'role':regUrole,'success':true});
+            });
+        }
+    });
+});
+  
+    
+//Route to retrieve group data
+app.post('/api/groups', (req, res) => {
+
+    fs.readFile('groupdata.json','utf-8', function(err, data) {
+
+        if (err) {
+            console.log(err);
+        } else {
+            var groupData = JSON.parse(data);
+            res.send({groupData});
+        }
+
+    });
+});
+
+//Route to delete group
+app.post('/api/delgroup', (req, res) => {
+
+    var delGname = req.body.groupname;
+    var delGroupObj;
+  
+    fs.readFile('groupdata.json','utf-8', function(err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            delGroupObj = JSON.parse(data);
+  
+            for (let i = 0; i < delGroupObj.length; i++) {
+                if (delGroupObj[i].name == delGname) {
+                    delete delGroupObj[i];
+                    break;
+                }
+            }
+            var rawdeldata = delGroupObj.filter(o => Object.keys(o).length);
+            var newdeldata = JSON.stringify(rawdeldata);
+            fs.writeFile('groupdata.json',newdeldata,'utf-8',function(err) {
+                if (err) throw err;
+                res.send({'groupname':delGname,'success':true});
+            });
+        }
+    });
+});
+
+//Route to handle group creation
+app.post('/api/reggroup', (req, res) => {
+
+    var regGroupObj;
+    var regGname = req.body.groupname;
+  
+    fs.readFile('groupdata.json','utf-8', function(err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            regGroupObj = JSON.parse(data);
+            regGroupObj.push({'name':regGname})
+            var newdata = JSON.stringify(regGroupObj);
+            fs.writeFile('groupdata.json',newdata,'utf-8',function(err) {
+                if (err) throw err;
+                res.send({'groupname':regGname,'success':true});
             });
         }
     });

@@ -1,6 +1,15 @@
 <h2>
   Chat Room
 </h2>
+<div class="form-group">
+    <label>Select a channel:</label>
+    <select class="form-control" name="channel">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button class="btn btn-primary" type="submit">Join</button>
+  </div>
 <div id="chat_history" style="height: 500px">
   <div *ngFor="let message of messages">
     {{ message.text }}

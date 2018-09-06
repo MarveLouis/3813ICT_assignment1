@@ -40,13 +40,13 @@ export class AdminComponent implements OnInit {
         }
       },
       err => {
-        alert('An error has occured trying to create user.')
+        alert('An error has occured.')
         console.log("Error occured");
         return;
       });
   }
 
-  //Delete user
+  //Delete a user
   public deleteUser(dUser) {
     if(dUser) { 
       event.preventDefault();
@@ -86,7 +86,6 @@ export class AdminComponent implements OnInit {
   public registerUser(event) {
     event.preventDefault();
     console.log(this.username);
-    if (sessionStorage.role != "user"){
       if(this.username === "" || this.email === "" || this.role === ""){
         alert("Please fill in all the fields.");
       }else{
@@ -128,8 +127,8 @@ export class AdminComponent implements OnInit {
                 console.log("Error occured");
                 return;
               });
-            }
-    }
+      }
+    
   }
   
 
