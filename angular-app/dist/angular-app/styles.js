@@ -539,7 +539,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\s2925329\Desktop\week5\angular-app\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\Test\3813ICT_assignment1\angular-app\src\styles.css */"./src/styles.css");
 
 
 /***/ })
