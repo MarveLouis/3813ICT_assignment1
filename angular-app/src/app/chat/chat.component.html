@@ -1,3 +1,6 @@
+<h2>
+  Chat Room
+</h2>
 <div id="chat_history" style="height: 500px">
   <div *ngFor="let message of messages">
     {{ message.text }}
@@ -6,3 +9,4 @@
 
 <input [(ngModel)]="message" type="text" placeholder="message" id="message" name="message" class="form-control">
 <button (click)="sendMessage(message)" class="btn btn-primary">Send</button>
+<router-outlet></router-outlet>

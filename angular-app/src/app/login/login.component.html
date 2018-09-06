@@ -1,8 +1,11 @@
 <h1>
   Enter your username
 </h1>
-
+<p>
+  Enter an existing username to login.
+  Otherwise contact an admin to register username.
+</p>
 <form (submit)="loginUser($event)">
   <input [(ngModel)]="username" type="text" placeholder="Username" id="username" name="username" class="form-control">
-  <button type="submit" class="btn btn-primary">Enter Chat</button>
+  <button type="submit" class="btn btn-primary">Login</button>
 </form>

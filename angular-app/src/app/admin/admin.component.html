@@ -1,3 +1,23 @@
-<p>
-  admin works!
-</p>
+<div class="container list-group-item">
+  <ul class="list-group ">
+    <h3>List of All Users</h3>
+
+    <li class="list-group-item" *ngFor="let user of users">
+      USERNAME: {{ user.name }} <br/> 
+      ROLE: {{ user.role }}
+    </li>
+  </ul>
+</div>
+
+<div class ="container list-group-item">
+    <h3>Delete a User</h3>
+    Selecte a user to delete:
+    <form (submit)="deleteUser(dUser);">
+        <select class="btn btn-outline-primary" placeholder="Delete User" [(ngModel)]="dUser" name="deluser">
+          <option *ngFor="let user of users, index as i" [value]="user.name">
+            ({{i}}) {{user.name}} ({{user.role}})
+          </option>
+        </select> <br/> <br/>
+      <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
+  </div>

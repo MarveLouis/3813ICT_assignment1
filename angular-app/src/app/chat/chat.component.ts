@@ -19,6 +19,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     if(!sessionStorage.getItem('username')){
       console.log('Not valid login');
+      alert("Please log in first.");
       this.router.navigateByUrl('home');
     } else {
       this.username = sessionStorage.getItem('username');

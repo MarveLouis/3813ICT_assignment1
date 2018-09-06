@@ -41,7 +41,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  admin works!\n</p>\n"
+module.exports = "<!-- \n<h3>List of All Users</h3>\n\n<ul class=\"list-group\">\n    <li class=\"list-group-item\" *ngFor=\"let user of users; index as i\">\n      ID: {{ i }} <br/> \n      USERNAME: {{user.name}} <br/> \n      ROLE: {{ user.role }}\n      <button (click)=\"deleteUser(user.name)\" class=\"btn btn-danger float-right\">Delete User</button>\n    </li>\n</ul> -->\n\n<div id=\"deleteUser\">\n    <h3>Delete User</h3>\n    <form (submit)=\"deleteUser(deletedUser);\">\n        <select placeholder=\"Delete User\" [(ngModel)]=\"deletedUser\" name=\"deluser\">\n          <option *ngFor=\"let user of users\" [value]=\"user.name\">\n            {{user.name}}\n          </option>\n        </select>\n      <p> Selected User to Delete:</p> <p class=\"delete\">{{deletedUser}}</p>\n      <button type=\"submit\">Delete</button>\n    </form>\n  </div>"
 
 /***/ }),
 
@@ -56,6 +56,8 @@ module.exports = "<p>\n  admin works!\n</p>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AdminComponent", function() { return AdminComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -66,10 +68,103 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var AdminComponent = /** @class */ (function () {
-    function AdminComponent() {
+    function AdminComponent(router, http) {
+        this.router = router;
+        this.http = http;
+        this.users = [{}];
     }
     AdminComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!sessionStorage.getItem('username')) {
+            console.log('Not valid login');
+            alert("Please log in first.");
+            this.router.navigateByUrl('home');
+        }
+        else if (sessionStorage.role != "super" && sessionStorage.role != "group") {
+            alert("Access denied.");
+            this.router.navigateByUrl('/chat');
+        }
+        //Get user data
+        var req = this.http.post('http://localhost:3000/api/users', {})
+            .subscribe(function (data) {
+            if (data.userData) {
+                _this.users = data.userData;
+            }
+            else {
+                alert('Error!');
+                return;
+            }
+        }, function (err) {
+            alert('An error has occured trying to create user.');
+            console.log("Error occured");
+            return;
+        });
+    };
+    // public deleteUser(dUser) {
+    //   if (dUser) {
+    //     console.log(dUser + " a");
+    //     const req = this.http.post('http://localhost:3000/api/del', {
+    //       username: this.dUser
+    //     })
+    //     .subscribe((data: any) =>{ 
+    //       console.log(data);
+    //     })
+    //   }
+    // }
+    AdminComponent.prototype.deleteUser = function (dUser) {
+        var _this = this;
+        // Deletes a user from the database
+        if (sessionStorage.role == "super") {
+            if (dUser) {
+                event.preventDefault();
+                console.log(dUser);
+                var req = this.http.post('http://localhost:3000/api/del', {
+                    username: this.dUser
+                })
+                    .subscribe(function (data) {
+                    console.log(data);
+                    console.log(data.success);
+                    if (data.success) {
+                        alert('User deleted successfully!');
+                        _this.dUser = '';
+                        var req_1 = _this.http.post('http://localhost:3000/api/users', {})
+                            .subscribe(function (data) {
+                            if (data.userData) {
+                                console.log('data', data.userData);
+                                _this.users = data.userData;
+                                console.log('thisusers', _this.users);
+                            }
+                            else {
+                                alert('Error!');
+                                return;
+                            }
+                        }, function (err) {
+                            alert('An error has occured trying to create user.');
+                            console.log("Error occured");
+                            return;
+                        });
+                    }
+                    else {
+                        alert('This user does not exist!');
+                        return;
+                    }
+                }, function (err) {
+                    alert('An error has occured trying to delete user.');
+                    console.log("Error occured", err);
+                    return;
+                });
+            }
+            else {
+                alert("You did not select a user to delete!");
+            }
+        }
+        else {
+            alert("You do not have permission to delete users!");
+            return;
+        }
     };
     AdminComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -77,7 +172,7 @@ var AdminComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./admin.component.html */ "./src/app/admin/admin.component.html"),
             styles: [__webpack_require__(/*! ./admin.component.css */ "./src/app/admin/admin.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"], _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
     ], AdminComponent);
     return AdminComponent;
 }());
@@ -155,7 +250,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">Chat-App</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarColor02\" aria-controls=\"navbarColor02\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <div class=\"collapse navbar-collapse\" id=\"navbarColor02\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item active\">\n        <a class=\"nav-link\" routerLink=\"home\">Home <span class=\"sr-only\">(current)</span></a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"chat\">Chat</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"admin\">Admin</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"group\">Group</a>\n      </li>\n    </ul>\n    <form class=\"form-inline my-2 my-lg-0\">\n      <input class=\"form-control mr-sm-2\" type=\"text\" placeholder=\"Search\">\n      <button class=\"btn btn-secondary my-2 my-sm-0\" type=\"submit\">Search</button>\n    </form>\n  </div>\n</nav>\n<router-outlet></router-outlet>"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">Chat-App</a>\n  <button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarColor02\" aria-controls=\"navbarColor02\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <div class=\"collapse navbar-collapse\" id=\"navbarColor02\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item active\">\n        <a class=\"nav-link\" routerLink=\"home\">Home <span class=\"sr-only\">(current)</span></a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"chat\">Chat</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"admin\">Admin</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"group\">Group</a>\n      </li>\n    </ul>\n    <div id=\"logout\">\n      <button class=\"btn btn-secondary my-2 my-sm-0\" type=\"button\" (click)=\"logout()\">Logout</button>\n    </div>\n  </div>\n</nav>\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -170,23 +265,42 @@ module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppComponent", function() { return AppComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
 
 var AppComponent = /** @class */ (function () {
-    function AppComponent() {
-        this.title = 'app';
+    function AppComponent(router) {
+        this.router = router;
+        this.title = 'Chat App';
     }
+    AppComponent.prototype.logout = function () {
+        event.preventDefault();
+        if (!sessionStorage.username) {
+            alert("You're not logged in.");
+        }
+        else {
+            sessionStorage.clear();
+            console.log(sessionStorage);
+            alert("Logout successful.");
+            this.router.navigateByUrl('');
+        }
+    };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-root',
             template: __webpack_require__(/*! ./app.component.html */ "./src/app/app.component.html"),
             styles: [__webpack_require__(/*! ./app.component.css */ "./src/app/app.component.css")]
-        })
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -281,7 +395,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"chat_history\" style=\"height: 500px\">\n  <div *ngFor=\"let message of messages\">\n    {{ message.text }}\n  </div>\n</div>\n\n<input [(ngModel)]=\"message\" type=\"text\" placeholder=\"message\" id=\"message\" name=\"message\" class=\"form-control\">\n<button (click)=\"sendMessage(message)\" class=\"btn btn-primary\">Send</button>"
+module.exports = "<h2>\n  Chat Room\n</h2>\n<div id=\"chat_history\" style=\"height: 500px\">\n  <div *ngFor=\"let message of messages\">\n    {{ message.text }}\n  </div>\n</div>\n\n<input [(ngModel)]=\"message\" type=\"text\" placeholder=\"message\" id=\"message\" name=\"message\" class=\"form-control\">\n<button (click)=\"sendMessage(message)\" class=\"btn btn-primary\">Send</button>\n<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -320,6 +434,7 @@ var ChatComponent = /** @class */ (function () {
         var _this = this;
         if (!sessionStorage.getItem('username')) {
             console.log('Not valid login');
+            alert("Please log in first.");
             this.router.navigateByUrl('home');
         }
         else {
@@ -391,6 +506,7 @@ module.exports = "<p>\n  group works!\n</p>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GroupComponent", function() { return GroupComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -401,10 +517,21 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var GroupComponent = /** @class */ (function () {
-    function GroupComponent() {
+    function GroupComponent(router) {
+        this.router = router;
     }
     GroupComponent.prototype.ngOnInit = function () {
+        if (!sessionStorage.getItem('username')) {
+            console.log('Not valid login');
+            alert("Please log in first.");
+            this.router.navigateByUrl('home');
+        }
+        else if (sessionStorage.role != "super" && sessionStorage.role != "group") {
+            alert("Access denied.");
+            this.router.navigateByUrl('/chat');
+        }
     };
     GroupComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -412,7 +539,7 @@ var GroupComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./group.component.html */ "./src/app/group/group.component.html"),
             styles: [__webpack_require__(/*! ./group.component.css */ "./src/app/group/group.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
     ], GroupComponent);
     return GroupComponent;
 }());
@@ -439,7 +566,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>\n  Enter your username\n</h1>\n\n<form (submit)=\"loginUser($event)\">\n  <input [(ngModel)]=\"username\" type=\"text\" placeholder=\"Username\" id=\"username\" name=\"username\" class=\"form-control\">\n  <button type=\"submit\" class=\"btn btn-primary\">Enter Chat</button>\n</form>"
+module.exports = "<h1>\n  Enter your username\n</h1>\n<p>\n  Enter an existing username to login.\n  Otherwise contact an admin to register username.\n</p>\n<form (submit)=\"loginUser($event)\">\n  <input [(ngModel)]=\"username\" type=\"text\" placeholder=\"Username\" id=\"username\" name=\"username\" class=\"form-control\">\n  <button type=\"submit\" class=\"btn btn-primary\">Login</button>\n</form>"
 
 /***/ }),
 
@@ -491,7 +618,7 @@ var LoginComponent = /** @class */ (function () {
             return;
         }
         else if (typeof (Storage) !== "undefined") {
-            var req = this.http.post('http://localhost:4200/api/auth', {
+            var req = this.http.post('http://localhost:3000/api/auth', {
                 username: this.username,
             })
                 .subscribe(function (data) {
