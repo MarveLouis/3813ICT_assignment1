@@ -5,7 +5,18 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const cors = require('cors');
+
+// CORS
+const cors = require('cors')
+var corsOptions = {
+  origin: 'http://localhost:4200',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+app.use(cors(corsOptions))
+
+// MongoDB
+const MongoClient = require('mongodb').MongoClient;
+const dbURL = "mongodb://localhost:27017";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
