@@ -6,6 +6,8 @@ const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
+const assert = require('assert');
+
 // CORS
 const cors = require('cors')
 var corsOptions = {
@@ -17,6 +19,7 @@ app.use(cors(corsOptions))
 // MongoDB
 const MongoClient = require('mongodb').MongoClient;
 const dbURL = "mongodb://localhost:27017";
+const dbName = "my_db";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -26,6 +29,18 @@ app.use(cors());
 require('./routes.js')(app, path);
 require('./socket.js')(app, io);
 require('./listen.js')(http);
+
+const client = new MongoClient(dbURL);
+
+// Use connect method to connect to the Server
+client.connect(function(err) {
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+
+  const db = client.db(dbName);
+
+  client.close();
+});
 
 //Route to handle login
 app.post('/api/auth', (req, res) => {
