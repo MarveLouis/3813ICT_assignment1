@@ -75,18 +75,36 @@ app.get('/group', function(req,res){
 //     });
 // });
 
-// Find all documents
-MongoClient.connect(dbURL, function(err, db){
-    if(err) throw err;
-    let dbo = db.db(dbName);        // Create the database object of the actual database inside our mongo server
+// // Find all documents
+// MongoClient.connect(dbURL, function(err, db) {
+//     if(err) throw err;
+//     let dbo = db.db(dbName);        // Create the database object of the actual database inside our mongo server
 
-    // Get all the database entries in our students collection
-    dbo.collection("userData").find({}).toArray(function(err, data){
-        if(err) throw err;
+//     // Get all the database entries in userData collection
+//     dbo.collection("userData").find({}).toArray(function(err, data){
+//         if(err) throw err;
 
-        // We call the result "data" to prevent confusion
-        console.log(data);
-        // db.close();
+//         // We call the result "data" to prevent confusion
+//         //console.log(data);
+//         // db.close();
+//     });
+// });
+
+//Get user data
+app.get('/api/users', (req, res) => {
+
+    MongoClient.connect(dbURL, function(err, db) {
+        if (err) throw err;
+        let dbo = db.db(dbName);
+
+        // Find users
+        dbo.collection("userData").find({}).toArray(function(err, data) {
+            if (err) throw err;
+            res.send(data);
+            console.log(data);
+        });
+
+        db.close();
     });
 });
 

@@ -15,9 +15,9 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
-  login(data) {
-    var uData = JSON.stringify(data);
-    return this.http.post(this.api + 'user/login', {uData}, httpOptions);
+  getUsers() {
+    console.log("user service getUsers");
+    return this.http.get(this.api + 'users');
   }
 
 

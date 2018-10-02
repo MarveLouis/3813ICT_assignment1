@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   private password:string;
   public email:string;
   public role:string;
+  public users;
 
   constructor(private router:Router, private form:FormsModule, private _userService:UserService) { }
 
@@ -24,29 +25,38 @@ export class LoginComponent implements OnInit {
     if(sessionStorage.getItem("username") != null) {
       alert("You're already logged in.");
       this.router.navigateByUrl('/chat');
+    } else {
+      this.getUsers();
     }
   }
 
-  public loginUser(event) {
+    getUsers() {
+      console.log("Getting user data");
+      this._userService.getUsers().subscribe(
+        data => { this.users = data},
+        err => console.error(err),
+        () => console.log(this.users)
+      );
+      sessionStorage.setItem("users", this.users);
+      console.log(this.users);
+    }
+
+  loginUser(event) {
     event.preventDefault();
 
-      let uData = {
-        username: this.username,
-        password: this.password
-      }
-
-      this._userService.login(uData).subscribe(data => {
-        if(data != false) {
-          let tData = JSON.stringify(data);
-          sessionStorage.setItem('user', tData);
+    if(typeof(Storage) !== "undefined") {
+      for (let user of this.users) {
+        if (user.name == this.username && user.pwd == this.password) {
+          sessionStorage.setItem("username", this.username);
+          sessionStorage.setItem("role", user.role);
           this.router.navigate(['/chat']);
-        } else {
-          alert("Login failed.");
         }
-      },
-      error => {
-        console.error(error);
-      });
+      }
+    } else {
+      alert("Incorrect Username/Password");
+    }
+
   }
+
 
 }
