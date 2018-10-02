@@ -7,6 +7,8 @@
       ID: {{ i }} <br/>
       USERNAME: {{ user.name }} <br/> 
       ROLE: {{ user.role }}
+      <button (click)="deleteUser(user)" class="float-right btn btn-danger">Delete</button>
+      <button (click)="updateUser(user)" class="float-right btn btn-success">Update</button>
     </li>
   </ul>
 </div>
@@ -39,20 +41,3 @@
       </form>
 </div>
 
-<!-- Delete a user block -->
-<div class ="container list-group-item">
-    <h3>Delete a User</h3>
-    <label>Selecte a user to delete:</label>
-
-    <form (submit)="deleteUser(dUser);">
-        <div class="form-group">
-          <select class="form-control" placeholder="Delete User" [(ngModel)]="dUser" name="deluser">
-            <option *ngFor="let user of users, index as i" [value]="user.name">
-              ({{i}}) {{user.name}} ({{user.role}})
-            </option>
-          </select>
-        </div>
-
-      <button class="btn btn-danger" type="submit">Delete</button>
-    </form>
-  </div>

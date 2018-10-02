@@ -128,6 +128,25 @@ app.post('/api/user', function(req, res) {
     });
 });
 
+//Delete a user
+app.delete('/api/user/:id', function(req, res) {
+    MongoClient.connect(dbURL, function(err, db){
+        if(err) throw err;
+        let ObjectID = require('mongodb').ObjectID;
+        let id = ObjectID(req.params.id)
+        let query = {
+            _id: id
+        }
+
+        let dbo = db.db(dbName);
+        dbo.collection("userData").deleteOne(query, function(err, data) {
+            if(err) throw err;
+            res.send(true);
+        });
+
+    });
+})
+
 // //Route to handle login
 // app.post('/api/auth', (req, res) => {
 

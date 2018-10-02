@@ -54,7 +54,19 @@ export class AdminComponent implements OnInit {
         return true;
       },
       error => {
-        console.error(error);
+        console.error("Error creating user");
+      }
+    )
+  }
+
+  deleteUser(user) {
+    this._userService.deleteUser(user).subscribe(
+      data => {
+        this.getUsers();
+        return true;
+      },
+      error => {
+        console.error("Error deleting user");
       }
     )
   }
