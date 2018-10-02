@@ -43,17 +43,22 @@ app.get('/group', function(req,res){
     res.sendFile(path.join(__dirname,'../angular-app/dist/angular-app/index.html'))
 });
 
-// const client = new MongoClient(dbURL);
 
-// // Use connect method to connect to the Server
-// client.connect(function(err) {
-//   assert.equal(null, err);
-//   console.log("Connected successfully to server");
 
-//   const db = client.db(dbName);
+// return all login data
+MongoClient.connect(dbURL, function(err, db){
+    if(err) throw err;
+    let dbo = db.db(dbName);        // Create the database object of the actual database inside our mongo server
 
-//   client.close();
-// });
+    // Get all the database entries in our students collection
+    dbo.collection("students").find({}).toArray(function(err, data){
+        if(err) throw err;
+
+        // We call the result "data" to prevent confusion
+        console.log(data);
+        // db.close();
+    });
+});
 
 // //Route to handle login
 // app.post('/api/auth', (req, res) => {
