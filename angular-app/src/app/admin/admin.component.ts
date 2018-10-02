@@ -71,5 +71,16 @@ export class AdminComponent implements OnInit {
     )
   }
 
+  updateUser(user) {
+    this._userService.updateUser(user).subscribe(
+      data => {
+        this.getUsers();
+        return true;
+      },
+      error => {
+        console.error("Error updating user");
+      }
+    )
+  }
 
 }

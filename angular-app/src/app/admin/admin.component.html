@@ -3,15 +3,41 @@
   <ul class="list-group ">
     <h3>List of All Users</h3>
 
-    <li class="list-group-item" *ngFor="let user of users, index as i">
-      ID: {{ i }} <br/>
-      USERNAME: {{ user.name }} <br/> 
-      ROLE: {{ user.role }}
-      <button (click)="deleteUser(user)" class="float-right btn btn-danger">Delete</button>
-      <button (click)="updateUser(user)" class="float-right btn btn-success">Update</button>
-    </li>
-  </ul>
+<div class="container">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">User ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Role</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users, index as i">
+        <td>
+          {{ i }}
+        </td>
+        <td>
+          <input type="text" name="username" [(ngModel)]="user.name" class="form-control-plaintext">
+        </td>
+        <td>
+          <select class="form-control-plaintext" [(ngModel)]="user.role" name="role">
+            <option value="1">User (1)</option>
+            <option value="2">Group Admin (2)</option>
+            <option value="3">Super Admin (3)</option>
+          </select>
+        </td>
+        <td>
+          <button (click)="updateUser(user)" class="btn btn-success">Update</button>
+          <button (click)="deleteUser(user)" class="btn btn-danger">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
+
 
 <!-- Register user block -->
 <div class="container list-group-item">

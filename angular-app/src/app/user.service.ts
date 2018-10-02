@@ -29,4 +29,9 @@ export class UserService {
     return this.http.delete(this.api + 'user/' + user._id);
   }
 
+  updateUser(user) {
+    let body = JSON.stringify(user);
+    return this.http.put(this.api + 'user/' + user._id, body, httpOptions);
+  }
+
 }
