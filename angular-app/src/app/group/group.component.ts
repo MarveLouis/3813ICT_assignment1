@@ -17,6 +17,7 @@ export class GroupComponent implements OnInit {
   public users;
   public groups;
 
+  //check if user is logged in and privilege level
   ngOnInit() {
     if(!sessionStorage.getItem('username')) {
       console.log('Not valid login');
@@ -30,6 +31,7 @@ export class GroupComponent implements OnInit {
     }
   }
   
+  //read all group data
   getGroups() {
     console.log("Getting groups");
     this._groupService.getGroups().subscribe(
@@ -39,6 +41,7 @@ export class GroupComponent implements OnInit {
     );
 }
 
+  //create new group with admin as current user
   createGroup(groupname) {
     let group = {
       groupname: groupname,
@@ -56,6 +59,7 @@ export class GroupComponent implements OnInit {
     )
   }
 
+  //delete existing group
   deleteGroup(group) {
     this._groupService.deleteGroup(group).subscribe(
       data => {
@@ -68,6 +72,7 @@ export class GroupComponent implements OnInit {
     )
   }
 
+  //update existing group
   updateGroup(group) {
     this._groupService.updateGroup(group).subscribe(
       data => {

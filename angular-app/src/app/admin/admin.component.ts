@@ -20,6 +20,7 @@ export class AdminComponent implements OnInit {
 
   dUser:string;
 
+  //check if user is logged in, and privilege level
   ngOnInit() {
     if(!sessionStorage.getItem('username')) {
       console.log('Not valid login');
@@ -33,6 +34,7 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  //read all user data
   getUsers() {
     console.log("Getting user data");
     this._userService.getUsers().subscribe(
@@ -42,6 +44,7 @@ export class AdminComponent implements OnInit {
     )
   }
 
+  //create new user
   createUser(username, password, role) {
     let user = {
       name: username,
@@ -59,6 +62,7 @@ export class AdminComponent implements OnInit {
     )
   }
 
+  //delete existing user
   deleteUser(user) {
     this._userService.deleteUser(user).subscribe(
       data => {
@@ -71,6 +75,7 @@ export class AdminComponent implements OnInit {
     )
   }
 
+  //update existing user
   updateUser(user) {
     this._userService.updateUser(user).subscribe(
       data => {

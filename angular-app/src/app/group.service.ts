@@ -15,20 +15,24 @@ export class GroupService {
 
   constructor(private http:HttpClient) { }
 
+  //handle retrieving group data
   getGroups() {
     console.log("group service getGroups");
     return this.http.get(this.api + 'groups');
   }
 
+  //handle create group
   createGroup(group) { 
     let body = JSON.stringify(group);
     return this.http.post(this.api + 'group/', body, httpOptions);
   }
 
+  //handle delete group
   deleteGroup(group) {
     return this.http.delete(this.api + 'group/' + group._id);
   }
 
+  //handle update group
   updateGroup(group) {
     let body = JSON.stringify(group);
     return this.http.put(this.api + 'group/' + group._id, body, httpOptions);
