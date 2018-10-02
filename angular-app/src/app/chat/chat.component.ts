@@ -17,18 +17,18 @@ export class ChatComponent implements OnInit {
   constructor(private sockServer: SocketService, private router:Router) { }
 
   ngOnInit() {
-    // if(!sessionStorage.getItem('username')){
-    //   console.log('Not valid login');
-    //   alert("Please log in first.");
-    //   this.router.navigateByUrl('home');
-    // } else {
-    //   this.username = sessionStorage.getItem('username');
-    //   console.log("Chat session started for user: " + this.username);
-    //   this.connection = this.sockServer.getMessages().subscribe(message=>{
-    //     this.messages.push(message);
-    //     this.message = '';
-    //   });
-    // }
+    if(!sessionStorage.getItem('username')){
+      console.log('Not valid login');
+      alert("Please log in first.");
+      this.router.navigateByUrl('home');
+    } else {
+      this.username = sessionStorage.getItem('username');
+      console.log("Chat session started for user: " + this.username);
+      this.connection = this.sockServer.getMessages().subscribe(message=>{
+        this.messages.push(message);
+        this.message = '';
+      });
+    }
   }
 
   sendMessage(){
