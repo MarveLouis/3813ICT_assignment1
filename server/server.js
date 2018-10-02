@@ -95,7 +95,7 @@ app.get('/api/users', (req, res) => {
 
     MongoClient.connect(dbURL, function(err, db) {
         if (err) throw err;
-        let dbo = db.db(dbName);
+        var dbo = db.db(dbName);
 
         // Find users
         dbo.collection("userData").find({}).toArray(function(err, data) {

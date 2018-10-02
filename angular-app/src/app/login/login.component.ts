@@ -33,12 +33,11 @@ export class LoginComponent implements OnInit {
     getUsers() {
       console.log("Getting user data");
       this._userService.getUsers().subscribe(
-        data => { this.users = data},
+        data => { this.users = data; sessionStorage.setItem("users", this.users); },
         err => console.error(err),
         () => console.log(this.users)
-      );
-      sessionStorage.setItem("users", this.users);
-      console.log(this.users);
+      )
+      console.log(sessionStorage);
     }
 
   loginUser(event) {
@@ -52,10 +51,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/chat']);
         }
       }
-    } else {
-      alert("Incorrect Username/Password");
-    }
-
+      if (sessionStorage.getItem("username") == undefined) {
+        alert("Incorrect Username/Password");
+      }
+    } 
   }
 
 
