@@ -90,7 +90,7 @@ app.get('/group', function(req,res){
 //     });
 // });
 
-//Get user data
+//Get user data 
 app.get('/api/users', (req, res) => {
 
     MongoClient.connect(dbURL, function(err, db) {
@@ -104,7 +104,27 @@ app.get('/api/users', (req, res) => {
             console.log(data);
         });
 
-        db.close();
+    });
+});
+
+//Create new user
+app.post('/api/user', function(req, res) {
+    MongoClient.connect(dbURL, function(err, db){
+        if(err) throw err;
+        var dbo = db.db(dbName);
+
+        let newUser = {
+            "name": req.body.name,
+            "pwd": req.body.pwd,
+            "role": req.body.role
+        }
+
+        dbo.collection("userData").insertOne(newUser, function(err, data) {
+            if(err) throw err;
+            console.log(data);
+            res.send(true);
+        })
+
     });
 });
 

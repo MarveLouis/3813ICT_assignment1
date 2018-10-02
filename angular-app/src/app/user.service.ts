@@ -20,5 +20,9 @@ export class UserService {
     return this.http.get(this.api + 'users');
   }
 
+  createUser(user) { 
+    let body = JSON.stringify(user);
+    return this.http.post(this.api + 'user/', body, httpOptions);
+  }
 
 }

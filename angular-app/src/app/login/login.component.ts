@@ -33,11 +33,11 @@ export class LoginComponent implements OnInit {
     getUsers() {
       console.log("Getting user data");
       this._userService.getUsers().subscribe(
-        data => { this.users = data; sessionStorage.setItem("users", this.users); },
+        data => { this.users = data;  },
         err => console.error(err),
         () => console.log(this.users)
       )
-      console.log(sessionStorage);
+      sessionStorage.setItem("users", this.users);
     }
 
   loginUser(event) {
