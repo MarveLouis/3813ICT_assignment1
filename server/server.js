@@ -199,3 +199,48 @@ app.post('/api/group', function(req, res) {
 
     });
 });
+
+//Delete a group
+app.delete('/api/group/:id', function(req, res) {
+    MongoClient.connect(dbURL, function(err, db){
+        if(err) throw err;
+        let ObjectID = require('mongodb').ObjectID;
+        let id = ObjectID(req.params.id)
+        let query = {
+            _id: id
+        }
+
+        let dbo = db.db(dbName);
+        dbo.collection("groupData").deleteOne(query, function(err, data) {
+            if(err) throw err;
+            res.send(true);
+        });
+
+    });
+})
+
+//Update group
+app.put('/api/group/:id', function (req, res) {
+
+    MongoClient.connect(dbURL, function(err, db){
+        if(err) throw err;
+        let ObjectID = require('mongodb').ObjectID;
+        let id = ObjectID(req.params.id)
+        let query = {
+            _id: id
+        }
+
+        let newValues = {
+            $set: {
+                groupname: req.body.groupname,
+            }
+        }
+
+        let dbo = db.db(dbName);
+        dbo.collection("groupData").update(query, newValues, function(err, data){
+            if(err) throw err;
+            res.send(true);
+        });
+
+    });
+})

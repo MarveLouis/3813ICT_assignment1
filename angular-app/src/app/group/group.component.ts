@@ -56,7 +56,29 @@ export class GroupComponent implements OnInit {
     )
   }
 
+  deleteGroup(group) {
+    this._groupService.deleteGroup(group).subscribe(
+      data => {
+        this.getGroups();
+        return true;
+      },
+      error => {
+        console.error("Error deleting group");
+      }
+    )
+  }
 
+  updateGroup(group) {
+    this._groupService.updateGroup(group).subscribe(
+      data => {
+        this.getGroups();
+        return true;
+      },
+      error => {
+        console.error("Error updating group");
+      }
+    )
+  }
 
 
 }
