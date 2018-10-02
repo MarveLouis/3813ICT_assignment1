@@ -2,6 +2,7 @@ s2925329_Assignment2_Documentation
 See word file for better format
 3813ICT_Software_Framework
 GitHub – https://github.com/MarveLouis/3813ICT_assignment1/tree/Assignment2-init
+
 Installation/Running –
 1.	Pull project from GitHub
 2.	Run npm install in angular-app and server folder to update/install npm
