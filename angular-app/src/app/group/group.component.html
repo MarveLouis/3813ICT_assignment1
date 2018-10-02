@@ -2,14 +2,42 @@
 <div class="container list-group-item">
     <ul class="list-group ">
       <h3>List of All Groups</h3>
-  
-      <li class="list-group-item" *ngFor="let group of groups, index as i">
-        ID: {{ i }} <br/>
-        Group Title: {{ group.groupname }}
-      </li>
-    </ul>
+
+  <div class="container">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Group ID</th>
+          <th scope="col">Group Title</th>
+          <th scope="col">Admin</th>
+          <th scope="col">Members</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let group of groups, index as i">
+          <td>
+            {{ i }}
+          </td>
+          <td>
+            <input type="text" name="groupname" [(ngModel)]="group.groupname" class="form-control-plaintext">
+          </td>
+          <td>
+            <label>{{group.admin}}</label>
+          </td>
+          <td>
+            MEMBER
+          </td>
+          <td>
+            <button (click)="updateGroup(group)" class="btn btn-success">Update</button>
+            <button (click)="deleteGroup(group)" class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
+
+
   <!-- Create new group block -->
   <div class="container list-group-item">
     <h3>Create New Group</h3>
