@@ -5,7 +5,7 @@
   
       <li class="list-group-item" *ngFor="let group of groups, index as i">
         ID: {{ i }} <br/>
-        Group Title: {{ group.name }}
+        Group Title: {{ group.groupname }}
       </li>
     </ul>
   </div>
@@ -14,7 +14,7 @@
   <div class="container list-group-item">
     <h3>Create New Group</h3>
       
-        <form (submit)="createGroup($event)">
+        <form (submit)="createGroup(groupname)">
           <div class="form-group">
             <label>Group Title</label>
             <input class="form-control" name="groupname" placeholder="Enter Group Title" [(ngModel)]="groupname">
@@ -23,21 +23,3 @@
           <button class="btn btn-primary" type="submit">Register</button>
         </form>
   </div>
-  
-  <!-- Delete a group block -->
-  <div class ="container list-group-item">
-      <h3>Delete a Group</h3>
-      <label>Selecte a group to delete:</label>
-  
-      <form (submit)="deleteGroup(dGroup);">
-          <div class="form-group">
-            <select class="form-control" placeholder="Delete Group" [(ngModel)]="dGroup" name="delgroup">
-              <option *ngFor="let group of groups, index as i" [value]="group.name">
-                ({{i}}) {{group.name}}
-              </option>
-            </select>
-          </div>
-  
-        <button class="btn btn-danger" type="submit">Delete</button>
-      </form>
-    </div>

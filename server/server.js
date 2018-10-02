@@ -62,18 +62,6 @@ app.get('/group', function(req,res){
 //     });
 // });
 
-// // Delete documents
-// MongoClient.connect(dbURL, function(err, db){
-//     if(err) throw err;
-//     let ObjectID = require('mongodb').ObjectID;
-//     let query = {
-//         pwd: 123
-//     }
-//     let dbo = db.db(dbName);
-//     dbo.collection("students").deleteMany(query, function(err, data){
-//         if(err) throw err;
-//     });
-// });
 
 // // Find all documents
 // MongoClient.connect(dbURL, function(err, db) {
@@ -175,3 +163,39 @@ app.put('/api/user/:id', function (req, res) {
     });
 })
 
+//Get group data 
+app.get('/api/groups', (req, res) => {
+
+    MongoClient.connect(dbURL, function(err, db) {
+        if (err) throw err;
+        var dbo = db.db(dbName);
+
+        // Find users
+        dbo.collection("groupData").find({}).toArray(function(err, data) {
+            if (err) throw err;
+            res.send(data);
+            console.log(data);
+        });
+
+    });
+});
+
+//Create new group
+app.post('/api/group', function(req, res) {
+    MongoClient.connect(dbURL, function(err, db){
+        if(err) throw err;
+        var dbo = db.db(dbName);
+
+        let newGroup = {
+            "groupname": req.body.groupname,
+            "admin": req.body.admin
+        }
+
+        dbo.collection("groupData").insertOne(newGroup, function(err, data) {
+            if(err) throw err;
+            console.log(data);
+            res.send(true);
+        })
+
+    });
+});
