@@ -17,7 +17,7 @@ app.use(cors(corsOptions))
 
 // MongoDB
 const MongoClient = require('mongodb').MongoClient;
-const dbURL = "mongodb://localhost:27017";
+const dbURL = "mongodb://localhost:27017/mydb";
 const dbName = "my_db";
 
 app.use(bodyParser.json());
@@ -43,15 +43,45 @@ app.get('/group', function(req,res){
     res.sendFile(path.join(__dirname,'../angular-app/dist/angular-app/index.html'))
 });
 
+// Populate database
+// let userData = [
+//     { name: "super", pwd: 123 , role: 3 },
+//     { name: "group", pwd: 123, role: 2 },
+//     { name: "user", pwd: 123, role: 1 },
+//     { name: "Louis", pwd: 123, role: 3 },
+//     { name: "Ryoma", pwd: 123, role: 3}
+// ];
 
+// console.log("Setting up initial db state");
+// MongoClient.connect(dbURL, function(err, db){
+//     if(err) throw err;
 
-// return all login data
+//     let dbo = db.db(dbName);
+//     dbo.collection("userData").insertMany(userData, function(err, data){
+//         console.log("Inserted data");
+//     });
+// });
+
+// // Delete documents
+// MongoClient.connect(dbURL, function(err, db){
+//     if(err) throw err;
+//     let ObjectID = require('mongodb').ObjectID;
+//     let query = {
+//         pwd: 123
+//     }
+//     let dbo = db.db(dbName);
+//     dbo.collection("students").deleteMany(query, function(err, data){
+//         if(err) throw err;
+//     });
+// });
+
+// Find all documents
 MongoClient.connect(dbURL, function(err, db){
     if(err) throw err;
     let dbo = db.db(dbName);        // Create the database object of the actual database inside our mongo server
 
     // Get all the database entries in our students collection
-    dbo.collection("students").find({}).toArray(function(err, data){
+    dbo.collection("userData").find({}).toArray(function(err, data){
         if(err) throw err;
 
         // We call the result "data" to prevent confusion

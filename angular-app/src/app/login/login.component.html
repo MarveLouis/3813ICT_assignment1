@@ -2,14 +2,14 @@
   Enter your username
 </h1>
 <label>
-  Enter an existing username and email to login.
-  Otherwise contact an admin to register username.
+  Enter an existing username and password to login.
+  Otherwise contact an admin to register user.
 </label>
 
 <form (submit)="loginUser($event)">
   <div class="form-group">
     <input [(ngModel)]="username" type="text" placeholder="Username" name="username" id="username" class="form-control">
-    <input [(ngModel)]='email' type="email" placeholder="Email"  name="email" id="email" class="form-control">
+    <input [(ngModel)]='password' type="password" placeholder="Password"  name="password" id="password" class="form-control">
   </div>
   <button type="submit" class="btn btn-primary">Login</button>
 </form>
